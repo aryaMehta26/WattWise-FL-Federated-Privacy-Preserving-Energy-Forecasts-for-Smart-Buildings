@@ -201,20 +201,6 @@ https://doi.org/10.1038/s41597-020-00712-x
 - **Secondary**: MAE (Mean Absolute Error)
 - **Diagnostics**: Error by season, temperature band, meter type, building type
 
-## 👥 Team Members & Roles
-
-- **Arya Mehta** - Lead & Data Integration (25%)
-- **Prajwal Dambalkar** - Data Ingestion & QA (25%)
-- **Keerthika Loganathan** - Feature Engineering & Modeling (25%)
-- **Devanshee Vyas** - Documentation, Explainability & Release (25%)
-
-## 📅 Milestones
-
-- **W1-W2**: Data ready (ingestion & QA)
-- **W3-W4**: Features & baselines
-- **W5-W6**: Models & explainability
-- **W7-W8**: Federated & robustness
-- **W9-W12**: Results & delivery
 
 ## 📝 License
 
@@ -232,6 +218,4 @@ The BDG2 dataset is available under the CC BY 4.0 license.
 
 For questions or collaboration opportunities, please contact the team members.
 
----
 
-**Last Updated**: November 2025
