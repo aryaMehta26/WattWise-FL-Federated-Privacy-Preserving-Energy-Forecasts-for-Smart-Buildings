@@ -1,0 +1,64 @@
+# Core Data Science Libraries
+numpy>=1.24.0
+pandas>=2.0.0
+scipy>=1.10.0
+
+# Machine Learning
+scikit-learn>=1.3.0
+lightgbm>=4.0.0
+interpret>=0.5.0  # For EBM (Explainable Boosting Machines)
+
+# Visualization
+matplotlib>=3.4.0
+seaborn>=0.11.0
+plotly>=5.0.0
+
+# Progress bars
+tqdm>=4.62.0
+
+# Configuration
+pyyaml>=5.4.0
+python-dotenv>=0.19.0
+
+# Jupyter
+jupyter>=1.0.0
+notebook>=6.4.0
+ipywidgets>=7.6.0
+
+# Data validation
+great-expectations>=0.15.0  # Optional: for data quality
+
+# Utilities
+requests>=2.26.0
+python-dateutil>=2.8.0
+
+# Model serialization
+joblib>=1.0.0
+
+# Logging
+colorlog>=6.0.0
+
+# Testing (optional)
+pytest>=6.2.0
+pytest-cov>=2.12.0
+
+# Type hints (optional)
+mypy>=0.910
+
+# Code formatting (optional)
+black>=21.0
+flake8>=3.9.0
+
+# File formats
+pyarrow>=5.0.0  # For Parquet files
+openpyxl>=3.0.0  # For Excel files
+
+# Time series utilities
+holidays>=0.11.0  # For holiday detection
+
+# Statistical analysis
+statsmodels>=0.13.0
+
+# Feature importance & explainability
+shap>=0.40.0  # SHAP values for model interpretation
+

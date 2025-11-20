@@ -1,0 +1,294 @@
+# WattWise-FL Configuration File
+
+# Project Settings
+project:
+  name: "WattWise-FL"
+  version: "0.1.0"
+  random_seed: 42
+  
+# Paths
+paths:
+  data_dir: "data"
+  raw_data: "data/raw"
+  processed_data: "data/processed"
+  features_data: "data/features"
+  splits_data: "data/splits"
+  models_dir: "models"
+  results_dir: "results"
+  figures_dir: "results/figures"
+  metrics_dir: "results/metrics"
+  model_cards_dir: "results/model_cards"
+
+# Data Download
+download:
+  bdg2_repo: "https://github.com/buds-lab/building-data-genome-project-2"
+  data_url_base: "https://raw.githubusercontent.com/buds-lab/building-data-genome-project-2/master/data"
+  
+# Data Processing
+preprocessing:
+  # Meter types to process
+  meter_types:
+    - "electricity"
+    - "chilledwater"
+    - "hotwater"
+    - "steam"
+  
+  # Focus on primary meter type
+  primary_meter: "electricity"
+  
+  # Time range
+  start_date: "2016-01-01"
+  end_date: "2017-12-31"
+  
+  # Missing data handling
+  max_forward_fill_hours: 2
+  min_non_null_ratio: 0.70  # Minimum 70% non-null data per building
+  
+  # Outlier detection
+  outlier_method: "iqr"  # Options: "iqr", "zscore", "isolation_forest"
+  iqr_multiplier: 3.0
+  
+  # Remove buildings with issues
+  remove_anomalous_buildings: true
+
+# Feature Engineering
+features:
+  # Calendar features
+  calendar:
+    hour_of_day: true
+    day_of_week: true
+    day_of_month: true
+    month: true
+    quarter: true
+    is_weekend: true
+    is_holiday: true  # US holidays
+    season: true
+    # Cyclical encoding
+    cyclical_encoding: true
+  
+  # Weather features
+  weather:
+    air_temperature: true
+    dew_temperature: true
+    wind_speed: true
+    wind_direction: true
+    sea_level_pressure: true
+    cloud_coverage: true
+    precip_depth: true
+    # Derived
+    apparent_temperature: true  # Feels-like temperature
+    humidity: true  # From dew point
+    heating_degree_days: true
+    cooling_degree_days: true
+    hdd_base_temp: 65  # Fahrenheit
+    cdd_base_temp: 65
+  
+  # Building features
+  building:
+    primary_use: true
+    square_feet: true
+    year_built: true
+    floor_count: true
+    # Derived
+    building_age: true
+    log_square_feet: true
+    # Encoding
+    use_target_encoding: true  # For primary_use
+  
+  # Lag features (hours)
+  lags:
+    enabled: true
+    lag_hours: [1, 24, 168]  # 1h, 1 day, 1 week
+  
+  # Rolling window features (hours)
+  rolling:
+    enabled: true
+    windows:
+      - window: 24
+        functions: ["mean", "std", "min", "max"]
+      - window: 168
+        functions: ["mean", "std"]
+  
+  # Interaction features
+  interactions:
+    enabled: true
+    features:
+      - ["air_temperature", "hour"]
+      - ["is_weekend", "hour"]
+
+# Train/Test Split
+splits:
+  # Unseen sites for final test
+  unseen_site_ratio: 0.20  # 20% of sites held out
+  
+  # Time-series CV
+  cv:
+    method: "rolling"  # Options: "rolling", "expanding"
+    n_splits: 5
+    test_months: 1  # Test on 1 month at a time
+    gap_months: 0  # No gap between train and test
+
+# Models Configuration
+models:
+  # Baseline models
+  baseline:
+    # Naive forecast: same hour last week
+    naive_weekly:
+      enabled: true
+    
+    # Rolling mean
+    rolling_mean:
+      enabled: true
+      window: 24
+  
+  # Ridge Regression
+  ridge:
+    enabled: true
+    param_grid:
+      alpha: [0.01, 0.1, 1.0, 10.0, 100.0]
+      fit_intercept: [true]
+      solver: ["auto"]
+  
+  # LightGBM
+  lightgbm:
+    enabled: true
+    param_grid:
+      num_leaves: [31, 50, 100]
+      learning_rate: [0.01, 0.05, 0.1]
+      n_estimators: [100, 300, 500]
+      max_depth: [5, 10, 15]
+      min_child_samples: [20, 50, 100]
+      subsample: [0.8, 1.0]
+      colsample_bytree: [0.8, 1.0]
+    
+    # Fixed params
+    fixed_params:
+      objective: "regression"
+      metric: "rmse"
+      verbose: -1
+      random_state: 42
+      n_jobs: -1
+  
+  # Explainable Boosting Machine (EBM)
+  ebm:
+    enabled: true
+    param_grid:
+      max_bins: [128, 256]
+      max_interaction_bins: [16, 32]
+      interactions: [5, 10]
+      learning_rate: [0.01, 0.05]
+      min_samples_leaf: [2, 5]
+    
+    fixed_params:
+      random_state: 42
+      n_jobs: -1
+
+# Federated Learning
+federated:
+  enabled: true
+  
+  # FedAvg parameters
+  n_rounds: 10
+  fraction_clients: 0.5  # Sample 50% of clients each round
+  local_epochs: 3
+  
+  # Aggregation
+  aggregation_method: "weighted_average"  # Weight by data size
+  
+  # Models to use in FL
+  models:
+    - "ridge"
+    - "ebm"
+  
+  # Note: Tree models (LightGBM) will use ensemble approach
+
+# Training Regimes
+regimes:
+  per_site:
+    enabled: true
+    description: "Train separate model for each site"
+  
+  centralized:
+    enabled: true
+    description: "Pool all data, train one global model"
+  
+  federated:
+    enabled: true
+    description: "Simulate federated learning (FedAvg)"
+
+# Evaluation Metrics
+metrics:
+  primary: "rmsle"  # Root Mean Squared Logarithmic Error
+  secondary:
+    - "mae"  # Mean Absolute Error
+    - "rmse"  # Root Mean Squared Error
+    - "mape"  # Mean Absolute Percentage Error
+    - "r2"  # R-squared
+  
+  # Slice evaluation by
+  slices:
+    - "meter_type"
+    - "primary_use"
+    - "season"
+    - "hour"
+    - "is_weekend"
+    - "temperature_band"
+
+# Visualization
+visualization:
+  # Figure settings
+  figsize: [12, 6]
+  dpi: 300
+  style: "seaborn-v0_8-darkgrid"
+  
+  # Plots to generate
+  plots:
+    - "actual_vs_predicted"
+    - "residuals"
+    - "feature_importance"
+    - "learning_curves"
+    - "error_distribution"
+    - "time_series_forecast"
+    - "error_by_hour"
+    - "error_by_temperature"
+  
+  # EBM explainability
+  ebm:
+    global_importance: true
+    global_feature_shapes: true
+    local_explanations: true
+    feature_interactions: true
+
+# Logging
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "wattwise.log"
+
+# Reproducibility
+reproducibility:
+  set_seeds: true
+  log_package_versions: true
+  log_git_commit: true
+  save_config_with_results: true
+
+# Computational Resources
+compute:
+  n_jobs: -1  # Use all available cores
+  use_gpu: false  # Set true if GPU available for LightGBM
+  memory_limit: null  # GB, null = no limit
+
+# Data Quality Checks
+data_quality:
+  checks:
+    - "schema_validation"
+    - "missing_values"
+    - "duplicate_rows"
+    - "timestamp_gaps"
+    - "negative_readings"
+    - "outliers"
+  
+  thresholds:
+    max_missing_ratio: 0.3
+    max_duplicate_ratio: 0.01
+
