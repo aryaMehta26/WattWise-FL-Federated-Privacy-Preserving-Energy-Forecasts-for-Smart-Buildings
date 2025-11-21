@@ -16,94 +16,46 @@ WattWise-FL builds a classical ML pipeline to forecast hourly whole-building ene
 
 ## 📁 Project Structure
 
-```
 ML PROJECT/
 │
 ├── README.md                          ← This file
 ├── requirements.txt                   ← Python dependencies
-├── environment.yml                    ← Conda environment (alternative)
 ├── .gitignore                         ← Git ignore rules
 ├── config.yaml                        ← Project configuration
+├── presentation_notes.md              ← Guide for class presentation
 │
 ├── data/                              ← Data directory (git-ignored)
 │   ├── raw/                           ← Original BDG2 data
 │   ├── processed/                     ← Cleaned & processed data
-│   ├── features/                      ← Feature matrices
-│   └── splits/                        ← Train/test split indices
-│
-├── notebooks/                         ← Jupyter notebooks
-│   ├── 01_data_download.ipynb         ← Download BDG2 dataset
-│   ├── 02_eda_metadata.ipynb          ← Explore building metadata
-│   ├── 03_eda_weather.ipynb           ← Explore weather data
-│   ├── 04_eda_meters.ipynb            ← Explore meter readings
-│   ├── 05_preprocessing.ipynb         ← Data cleaning & QA
-│   ├── 06_feature_engineering.ipynb   ← Create features
-│   ├── 07_baseline_models.ipynb       ← Naive baselines & Ridge
-│   ├── 08_lightgbm_models.ipynb       ← LightGBM training
-│   ├── 09_ebm_models.ipynb            ← EBM training
-│   ├── 10_federated_learning.ipynb    ← FL simulation
-│   └── 11_results_analysis.ipynb      ← Final results & plots
+│   └── interim/                       ← Intermediate data
 │
 ├── src/                               ← Source code
-│   ├── __init__.py
+│   ├── step1_data_cleaning.py         ← Step 1 script
+│   ├── step2_feature_engineering.py   ← Step 2 script
+│   ├── step3_train_models.py          ← Step 3 script
+│   ├── app.py                         ← Streamlit Dashboard
+│   │
 │   ├── data/
-│   │   ├── __init__.py
 │   │   ├── download.py                ← Download BDG2 data
-│   │   ├── preprocessing.py           ← Data cleaning functions
-│   │   └── validation.py              ← Data quality checks
+│   │   └── preprocessing.py           ← Data cleaning functions
 │   │
 │   ├── features/
-│   │   ├── __init__.py
 │   │   ├── calendar_features.py       ← Time-based features
 │   │   ├── weather_features.py        ← Weather features
 │   │   ├── building_features.py       ← Building metadata features
 │   │   └── lag_features.py            ← Lag & rolling features
 │   │
 │   ├── models/
-│   │   ├── __init__.py
-│   │   ├── baseline.py                ← Naive baselines
-│   │   ├── ridge.py                   ← Ridge regression
 │   │   ├── lightgbm_model.py          ← LightGBM wrapper
 │   │   ├── ebm_model.py               ← EBM wrapper
 │   │   └── federated.py               ← Federated learning
 │   │
-│   ├── evaluation/
-│   │   ├── __init__.py
-│   │   ├── metrics.py                 ← RMSLE, MAE, etc.
-│   │   ├── cv_splitter.py             ← Time-series CV
-│   │   └── diagnostics.py             ← Error analysis
-│   │
-│   ├── visualization/
-│   │   ├── __init__.py
-│   │   ├── plots.py                   ← Standard plots
-│   │   └── explainability.py          ← EBM, SHAP, PDP plots
-│   │
 │   └── utils/
-│       ├── __init__.py
 │       ├── config.py                  ← Config loader
 │       ├── logging_utils.py           ← Logging setup
 │       └── io.py                      ← File I/O utilities
 │
-├── models/                            ← Saved models (git-ignored)
-│   ├── baseline/
-│   ├── centralized/
-│   ├── per_site/
-│   └── federated/
-│
-├── results/                           ← Results & figures
-│   ├── metrics/                       ← Metrics tables
-│   ├── figures/                       ← Plots & visualizations
-│   └── model_cards/                   ← Model documentation
-│
-├── tests/                             ← Unit tests
-│   ├── test_preprocessing.py
-│   ├── test_features.py
-│   └── test_models.py
-│
-└── docs/                              ← Documentation
-    ├── data_dictionary.md
-    ├── processing.md
-    └── model_cards_template.md
+└── models/                            ← Saved models (git-ignored)
 ```
 
 ## 🚀 Quick Start (The "Clean" Workflow)
