@@ -44,6 +44,18 @@ def main():
     logger.info(f"Loading cleaned data from {input_path}...")
     df = pd.read_pickle(input_path)
     
+    # Store initial column count for metrics
+    initial_columns = df.shape[1]
+    
+    # Print initial metrics
+    logger.info("\n" + "="*60)
+    logger.info("📊 DATA BEFORE FEATURE ENGINEERING")
+    logger.info("="*60)
+    logger.info(f"Total Rows: {df.shape[0]:,}")
+    logger.info(f"Total Columns: {df.shape[1]}")
+    logger.info(f"Memory Usage: {df.memory_usage(deep=True).sum() / 1024**3:.2f} GB")
+    logger.info("="*60 + "\n")
+    
     # 1. Calendar Features
     logger.info("--> Adding Calendar Features (Hour, Day, Month, Cyclical)...")
     df = add_calendar_features(df)
@@ -75,7 +87,22 @@ def main():
     df = df.dropna(subset=subset_cols)
     
     dropped_rows = initial_rows - len(df)
-    logger.info(f"    Dropped {dropped_rows} rows (initial warm-up period for lags).")
+    logger.info(f"    Dropped {dropped_rows:,} rows (initial warm-up period for lags).")
+    
+    # Print final metrics
+    logger.info("\n" + "="*60)
+    logger.info("📊 DATA AFTER FEATURE ENGINEERING")
+    logger.info("="*60)
+    logger.info(f"Total Rows: {df.shape[0]:,}")
+    logger.info(f"Total Columns: {df.shape[1]}")
+    logger.info(f"Features Added: {df.shape[1] - initial_columns}")
+    logger.info(f"Memory Usage: {df.memory_usage(deep=True).sum() / 1024**3:.2f} GB")
+    logger.info(f"\nNew Features Include:")
+    logger.info(f"  - Calendar: hour, day_of_week, month, is_weekend, cyclical encoding")
+    logger.info(f"  - Weather: humidity, rolling temperature averages")
+    logger.info(f"  - Building: building_age, log_square_feet")
+    logger.info(f"  - Temporal: lag_1h, lag_24h, rolling_24h_mean")
+    logger.info("="*60 + "\n")
     
     output_path = "data/processed/final_features.pkl"
     logger.info(f"Saving feature-rich data to {output_path}...")

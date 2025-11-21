@@ -36,8 +36,8 @@ venv.bak/
 profile_default/
 ipython_config.py
 
-# Data files (too large for git)
-data/raw/
+# Data directories (keep processed/features/splits ignored, but allow raw data)
+# data/raw/
 data/processed/
 data/features/
 data/splits/

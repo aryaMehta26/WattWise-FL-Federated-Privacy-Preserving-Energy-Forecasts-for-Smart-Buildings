@@ -51,6 +51,19 @@ def main():
         save_intermediate=False # We save manually below
     )
     
+    # Print detailed metrics
+    logger.info("\n" + "="*60)
+    logger.info("📊 DATA METRICS AFTER CLEANING")
+    logger.info("="*60)
+    logger.info(f"Total Rows: {df.shape[0]:,}")
+    logger.info(f"Total Columns: {df.shape[1]}")
+    logger.info(f"Memory Usage: {df.memory_usage(deep=True).sum() / 1024**3:.2f} GB")
+    logger.info(f"Date Range: {df['timestamp'].min()} to {df['timestamp'].max()}")
+    logger.info(f"Number of Buildings: {df['building_id'].nunique()}")
+    logger.info(f"Number of Sites: {df['site_id'].nunique()}")
+    logger.info(f"\nColumns: {', '.join(df.columns.tolist())}")
+    logger.info("="*60 + "\n")
+    
     output_path = "data/interim/cleaned_data.pkl"
     logger.info(f"Saving cleaned data to {output_path}...")
     df.to_pickle(output_path)

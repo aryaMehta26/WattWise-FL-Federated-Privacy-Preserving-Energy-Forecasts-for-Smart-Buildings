@@ -45,6 +45,17 @@ def main():
     logger.info(f"Loading feature data from {input_path}...")
     df = pd.read_pickle(input_path)
     
+    # Print dataset metrics
+    logger.info("\n" + "="*60)
+    logger.info("📊 DATASET METRICS")
+    logger.info("="*60)
+    logger.info(f"Total Rows: {df.shape[0]:,}")
+    logger.info(f"Total Columns: {df.shape[1]}")
+    logger.info(f"Memory Usage: {df.memory_usage(deep=True).sum() / 1024**3:.2f} GB")
+    logger.info(f"Number of Buildings: {df['building_id'].nunique()}")
+    logger.info(f"Number of Sites: {df['site_id'].nunique()}")
+    logger.info("="*60 + "\n")
+    
     # Train/Test Split
     logger.info("--> Splitting Train/Test sets (Time-based)...")
     dates = df['timestamp'].sort_values().unique()
@@ -53,8 +64,14 @@ def main():
     train_df = df[df['timestamp'] < split_date]
     test_df = df[df['timestamp'] >= split_date]
     
-    logger.info(f"    Train: {train_df['timestamp'].min()} -> {train_df['timestamp'].max()}")
-    logger.info(f"    Test:  {test_df['timestamp'].min()} -> {test_df['timestamp'].max()}")
+    logger.info("\n" + "="*60)
+    logger.info("📊 TRAIN/TEST SPLIT METRICS")
+    logger.info("="*60)
+    logger.info(f"Train: {train_df['timestamp'].min()} -> {train_df['timestamp'].max()}")
+    logger.info(f"Test:  {test_df['timestamp'].min()} -> {test_df['timestamp'].max()}")
+    logger.info(f"Train Rows: {len(train_df):,} ({len(train_df)/len(df)*100:.1f}%)")
+    logger.info(f"Test Rows:  {len(test_df):,} ({len(test_df)/len(df)*100:.1f}%)")
+    logger.info("="*60 + "\n")
     
     # Feature Selection
     target = 'meter_reading'
@@ -71,6 +88,7 @@ def main():
     y_test = test_df[target]
     
     logger.info(f"    Training with {len(features)} features.")
+    logger.info(f"    Feature list: {', '.join(features[:10])}...")
     
     # 1. LightGBM
     logger.info("\n[MODEL 1] LightGBM (Gradient Boosting)")
@@ -118,9 +136,15 @@ def main():
     logger.info("\n" + "="*60)
     logger.info("✅ FINAL RESULTS")
     logger.info("="*60)
-    logger.info(f"LightGBM RMSLE: {lgb_metrics['RMSLE']:.4f} | R2: {lgb_metrics['R2']:.4f}")
-    logger.info(f"EBM RMSLE:      {ebm_metrics['RMSLE']:.4f} | R2: {ebm_metrics['R2']:.4f}")
-    logger.info("Federated Sim:  Completed")
+    logger.info(f"LightGBM:")
+    logger.info(f"  RMSLE: {lgb_metrics['RMSLE']:.4f}")
+    logger.info(f"  R2 Score: {lgb_metrics['R2']:.4f} ({lgb_metrics['R2']*100:.1f}% Accuracy)")
+    logger.info(f"  MAE: {lgb_metrics['MAE']:.2f} kWh")
+    logger.info(f"\nEBM:")
+    logger.info(f"  RMSLE: {ebm_metrics['RMSLE']:.4f}")
+    logger.info(f"  R2 Score: {ebm_metrics['R2']:.4f} ({ebm_metrics['R2']*100:.1f}% Accuracy)")
+    logger.info(f"  MAE: {ebm_metrics['MAE']:.2f} kWh")
+    logger.info(f"\nFederated Sim: Completed")
     logger.info("="*60)
 
 if __name__ == "__main__":
