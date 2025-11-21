@@ -91,7 +91,40 @@ def clean_meter_data(
         df['timestamp'] = pd.to_datetime(df['timestamp'])
         logger.info("  ✓ Parsed timestamps")
     
-    # Check for meter_reading column
+    # Check for wide format (timestamps + many building columns)
+    # Wide format usually has 'timestamp' and then building_ids as columns
+    if 'meter_reading' not in df.columns and len(df.columns) > 10:
+        logger.info("  Detected wide format. Melting to long format...")
+        
+        # Ensure timestamp is preserved
+        if 'timestamp' not in df.columns:
+            # If timestamp is index, reset it
+            if isinstance(df.index, pd.DatetimeIndex):
+                df = df.reset_index()
+                df = df.rename(columns={'index': 'timestamp'})
+            else:
+                # Try to find timestamp column (often first column)
+                # Assuming first column is timestamp if it looks like it
+                first_col = df.columns[0]
+                try:
+                    pd.to_datetime(df[first_col])
+                    df = df.rename(columns={first_col: 'timestamp'})
+                except:
+                    pass
+
+        if 'timestamp' in df.columns:
+            # Melt
+            id_vars = ['timestamp']
+            value_vars = [c for c in df.columns if c != 'timestamp']
+            df = df.melt(id_vars=id_vars, var_name='building_id', value_name='meter_reading')
+            logger.info(f"  ✓ Melted to {len(df)} rows")
+            
+            # Extract site_id from building_id (e.g., 'Bear_education_...' -> 'Bear')
+            # But wait, metadata merge handles site_id. We just need building_id.
+        else:
+             raise ValueError("Could not find timestamp column in wide format data")
+
+    # Check for meter_reading column again
     reading_col = None
     for col in ['meter_reading', 'reading', 'value']:
         if col in df.columns:

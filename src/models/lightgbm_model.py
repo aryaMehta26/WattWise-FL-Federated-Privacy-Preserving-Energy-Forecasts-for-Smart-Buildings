@@ -116,10 +116,21 @@ class LightGBMModel:
         preds_safe = np.maximum(preds, 0)
         rmsle = np.sqrt(mean_squared_error(np.log1p(y_test_safe), np.log1p(preds_safe)))
         
+        # R2 Score
+        from sklearn.metrics import r2_score
+        r2 = r2_score(y_test, preds)
+
+        # MAPE (Mean Absolute Percentage Error)
+        # Avoid division by zero
+        mask = y_test != 0
+        mape = np.mean(np.abs((y_test[mask] - preds[mask]) / y_test[mask])) * 100
+        
         metrics = {
             'RMSE': rmse,
             'MAE': mae,
-            'RMSLE': rmsle
+            'RMSLE': rmsle,
+            'R2': r2,
+            'MAPE': mape
         }
         
         logger.info(f"Evaluation Metrics: {metrics}")
