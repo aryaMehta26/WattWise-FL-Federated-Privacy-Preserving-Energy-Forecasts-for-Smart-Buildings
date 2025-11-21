@@ -2,11 +2,16 @@
 
 ## ⚠️ Important: Data Setup
 
-The BDG2 electricity.csv file is **167 MB** and cannot be downloaded directly from GitHub in Colab.
+The BDG2 electricity.csv file is **167 MB** and **cannot be stored in GitHub** (exceeds 100 MB limit).
 
-### **Option 1: Clone Your Repository (EASIEST)** ✅
+**Your repository contains:**
+- ✅ `metadata.csv` (266 KB) - in repo
+- ✅ `weather.csv` (19 MB) - in repo  
+- ❌ `electricity.csv` (167 MB) - **NOT in repo, must upload manually**
 
-Your GitHub repository already has all the data. Just run:
+### **Option 1: Upload electricity.csv Manually (RECOMMENDED)** ✅
+
+Since electricity.csv is not in the GitHub repository, you need to upload it:
 
 ```python
 !git clone https://github.com/aryaMehta26/WattWise-FL-Federated-Privacy-Preserving-Energy-Forecasts-for-Smart-Buildings.git
