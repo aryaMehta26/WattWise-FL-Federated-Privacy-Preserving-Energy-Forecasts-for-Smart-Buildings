@@ -13,6 +13,20 @@
       "checksum_sha256": "744ab9a3ed175f64292bbdcea43d09755c1774747ac8c4f3b2b9f3504221dfa4",
       "download_timestamp_utc": "2025-11-11T08:05:10.188266",
       "file_size_bytes": 133
+    },
+    {
+      "filename": "metadata.csv",
+      "url": "https://raw.githubusercontent.com/buds-lab/building-data-genome-project-2/master/data/metadata/metadata.csv",
+      "checksum_sha256": "2a73307e7426c7a27d4558227aa44e8858aa14804cafd9a17512f883da68f6d9",
+      "download_timestamp_utc": "2025-11-22T00:18:19.467671",
+      "file_size_bytes": 131
+    },
+    {
+      "filename": "weather.csv",
+      "url": "https://raw.githubusercontent.com/buds-lab/building-data-genome-project-2/master/data/weather/weather.csv",
+      "checksum_sha256": "744ab9a3ed175f64292bbdcea43d09755c1774747ac8c4f3b2b9f3504221dfa4",
+      "download_timestamp_utc": "2025-11-22T00:18:20.541357",
+      "file_size_bytes": 133
     }
   ]
 }

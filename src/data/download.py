@@ -1,6 +1,7 @@
 """Download Building Data Genome 2 (BDG2) dataset."""
 
 import os
+import sys
 import requests
 from pathlib import Path
 from typing import Optional, List
@@ -10,9 +11,11 @@ import hashlib
 from datetime import datetime
 import pandas as pd
 
-from ..utils.config import load_config, get_paths
-from ..utils.logging_utils import get_logger
+# Add project root to path
+sys.path.append(str(Path(__file__).parent.parent.parent))
 
+from src.utils.config import load_config, get_paths
+from src.utils.logging_utils import get_logger
 logger = get_logger(__name__)
 
 

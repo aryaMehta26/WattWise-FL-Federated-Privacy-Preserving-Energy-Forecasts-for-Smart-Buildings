@@ -1,0 +1,88 @@
+{
+  "meter_comparison": [
+    {
+      "meter_type": "electricity",
+      "n_buildings": 1578,
+      "n_readings": 10000,
+      "mean": 139.2369900776787,
+      "median": 54.45,
+      "std": 265.7093588881919,
+      "min": 0.0,
+      "max": 164693.0,
+      "q25": 15.75,
+      "q75": 149.52
+    },
+    {
+      "meter_type": "chilledwater",
+      "n_buildings": 555,
+      "n_readings": 10000,
+      "mean": 48362.15343135837,
+      "median": 313.2873,
+      "std": 265527.7133657503,
+      "min": 0.0,
+      "max": 9688842.5625,
+      "q25": 12.89,
+      "q75": 1715.168
+    },
+    {
+      "meter_type": "hotwater",
+      "n_buildings": 185,
+      "n_readings": 10000,
+      "mean": 47901.557652456824,
+      "median": 858.9032,
+      "std": 127729.11179714807,
+      "min": 0.0,
+      "max": 7693794.847,
+      "q25": 0.0,
+      "q75": 29702.6579
+    },
+    {
+      "meter_type": "steam",
+      "n_buildings": 370,
+      "n_readings": 10000,
+      "mean": 3677.490083098629,
+      "median": 84.79,
+      "std": 116950.10882126179,
+      "min": 0.0,
+      "max": 6680934.72,
+      "q25": 13.9538,
+      "q75": 365.83574999999996
+    }
+  ],
+  "distributions": {
+    "electricity": {
+      "skewness": 24.757287822882578,
+      "kurtosis": 10629.172703659417,
+      "cv": 1.9083244958107448,
+      "zero_pct": 4.922159377200092
+    },
+    "chilledwater": {
+      "skewness": 13.303122569324367,
+      "kurtosis": 265.3601776516559,
+      "cv": 5.49040302232655,
+      "zero_pct": 19.605465823619312
+    },
+    "hotwater": {
+      "skewness": 7.61325602929681,
+      "kurtosis": 165.08160351985387,
+      "cv": 2.666491823165107,
+      "zero_pct": 32.942362989222445
+    },
+    "steam": {
+      "skewness": 41.863618499804495,
+      "kurtosis": 1859.6975335898885,
+      "cv": 31.801610929898253,
+      "zero_pct": 14.175049181659979
+    }
+  },
+  "correlations": [],
+  "summary": {
+    "meter_types_analyzed": [
+      "electricity",
+      "chilledwater",
+      "hotwater",
+      "steam"
+    ],
+    "total_buildings": 2688
+  }
+}
